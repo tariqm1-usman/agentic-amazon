@@ -1,0 +1,263 @@
+{
+  "env": "fund_finance",
+  "model_provider": "fireworks",
+  "model": "qwen3-coder-480b-a35b-instruct",
+  "num_trials": 3,
+  "temperature": 1,
+  "interface_num": 2,
+  "task": {
+    "user_id": "22",
+    "instruction": "You are acting as a finance officer with email 'carl.gentry@investment.com'. An investor named 'Griffith, Hampton and James' (contact email: 'griffith5322@gmail.com') has requested to redeem $25,000 from the fund 'Thornton-Shepherd Income Fund' on 2025-10-07. After confirming both compliance officer approval from 'craigramirez@investment.com' and your own finance officer approval, validate all required details including investor eligibility and fund status. If all conditions are met, process the redemption and log the action for audit purposes using the 'process' action in the audit trail. If any required information or approval is missing, or if any step fails, halt the process and report the error as per standard operating procedures.",
+    "actions": [
+      {
+        "name": "search_user_entities",
+        "arguments": {
+          "entity_type": "users",
+          "filters": {
+            "email": "carl.gentry@investment.com",
+            "role": "finance_officer"
+          }
+        },
+        "output": {
+          "count": 1,
+          "entity_type": "users",
+          "results": [
+            {
+              "created_at": "2025-01-14T05:14:51",
+              "email": "carl.gentry@investment.com",
+              "first_name": "Carl",
+              "last_name": "Gentry",
+              "role": "finance_officer",
+              "status": "active",
+              "timezone": "America/Los_Angeles",
+              "updated_at": "2025-05-16T10:15:28",
+              "user_id": "22"
+            }
+          ],
+          "success": true
+        }
+      },
+      {
+        "name": "search_user_entities",
+        "arguments": {
+          "entity_type": "users",
+          "filters": {
+            "email": "craigramirez@investment.com",
+            "role": "compliance_officer"
+          }
+        },
+        "output": {
+          "count": 1,
+          "entity_type": "users",
+          "results": [
+            {
+              "created_at": "2025-04-30T15:16:35",
+              "email": "craigramirez@investment.com",
+              "first_name": "Craig",
+              "last_name": "Ramirez",
+              "role": "compliance_officer",
+              "status": "active",
+              "timezone": "UTC",
+              "updated_at": "2025-07-10T11:31:03",
+              "user_id": "15"
+            }
+          ],
+          "success": true
+        }
+      },
+      {
+        "name": "search_investor_entities",
+        "arguments": {
+          "entity_type": "investors",
+          "filters": {
+            "contact_email": "griffith5322@gmail.com",
+            "name": "Griffith, Hampton and James"
+          }
+        },
+        "output": {
+          "count": 1,
+          "entity_type": "investors",
+          "results": [
+            {
+              "accreditation_status": "accredited",
+              "address": "07562 Vaughn Loop, Salaston, VT 18599",
+              "contact_email": "griffith5322@gmail.com",
+              "country": "Australia",
+              "created_at": "2025-07-08T21:18:03",
+              "date_of_incorporation": "1996-09-11",
+              "investor_id": "35",
+              "name": "Griffith, Hampton and James",
+              "registration_number": 260156579,
+              "source_of_funds": "external_investment",
+              "status": "onboarded",
+              "tax_id": "938-57-8652"
+            }
+          ],
+          "success": true
+        }
+      },
+      {
+        "name": "search_fund_entities",
+        "arguments": {
+          "entity_type": "funds",
+          "filters": {
+            "name": "Thornton-Shepherd Income Fund"
+          }
+        },
+        "output": {
+          "count": 1,
+          "entity_type": "funds",
+          "results": [
+            {
+              "created_at": "2023-12-24T09:42:57",
+              "fund_id": "92",
+              "fund_type": "infrastructure_funds",
+              "manager_id": "99",
+              "name": "Thornton-Shepherd Income Fund",
+              "size": 371392238.37,
+              "status": "open",
+              "updated_at": "2025-07-24T20:01:33"
+            }
+          ],
+          "success": true
+        }
+      },
+      {
+        "name": "check_approval",
+        "arguments": {
+          "action": "redemption_processing",
+          "requester_email": "craigramirez@investment.com"
+        },
+        "output": {
+          "approval_valid": true,
+          "message": "Role 'compliance_officer' is directly authorized for action 'redemption_processing'"
+        }
+      },
+      {
+        "name": "check_approval",
+        "arguments": {
+          "action": "redemption_processing",
+          "requester_email": "carl.gentry@investment.com"
+        },
+        "output": {
+          "approval_valid": true,
+          "message": "Role 'finance_officer' is directly authorized for action 'redemption_processing'"
+        }
+      },
+      {
+        "name": "handle_redemption",
+        "arguments": {
+          "compliance_officer_approval": true,
+          "finance_officer_approval": true,
+          "processed_date": "2025-10-07",
+          "redemption_id": "92",
+          "status": "processed"
+        },
+        "output": {
+          "processed_date": "2025-10-07",
+          "redemption_amount": 38394.01,
+          "redemption_fee": 3839.4010000000003,
+          "redemption_id": "92",
+          "request_date": "2024-11-10",
+          "status": "processed",
+          "subscription_id": "1712",
+          "updated_at": "2025-10-01T00:00:00"
+        }
+      },
+      {
+        "name": "add_new_audit_trail",
+        "arguments": {
+          "action": "process",
+          "reference_id": "92",
+          "reference_type": "redemption"
+        },
+        "output": {
+          "action": "process",
+          "audit_trail_id": "3501",
+          "created_at": "2025-10-01T00:00:00",
+          "field_name": null,
+          "new_value": null,
+          "old_value": null,
+          "reference_id": "92",
+          "reference_type": "redemption"
+        }
+      }
+    ],
+    "outputs": ["35", "92", "3501"],
+    "edges": [
+      {
+        "from": "instruction",
+        "to": "search_user_entities",
+        "connection": {
+          "output": "entity_type, email, role",
+          "input": "entity_type, filters.email, filters.role"
+        }
+      },
+      {
+        "from": "instruction",
+        "to": "search_investor_entities",
+        "connection": {
+          "output": "entity_type, contact_email, name",
+          "input": "entity_type, filters.contact_email, filters.name"
+        }
+      },
+      {
+        "from": "instruction",
+        "to": "search_fund_entities",
+        "connection": {
+          "output": "entity_type, name",
+          "input": "entity_type, filters.name"
+        }
+      },
+      {
+        "from": "instruction",
+        "to": "check_approval",
+        "connection": {
+          "output": "action",
+          "input": "action"
+        }
+      },
+      {
+        "from": "search_user_entities",
+        "to": "check_approval",
+        "connection": {
+          "output": "results[0].email",
+          "input": "requester_email"
+        }
+      },
+      {
+        "from": "check_approval",
+        "to": "handle_redemption",
+        "connection": {
+          "output": "approval_valid, approval_valid",
+          "input": "compliance_officer_approval, finance_officer_approval"
+        }
+      },
+      {
+        "from": "instruction",
+        "to": "handle_redemption",
+        "connection": {
+          "output": "processed_date, redemption_id, status",
+          "input": "processed_date, redemption_id, status"
+        }
+      },
+      {
+        "from": "instruction",
+        "to": "add_new_audit_trail",
+        "connection": {
+          "output": "action, reference_type",
+          "input": "action, reference_type"
+        }
+      },
+      {
+        "from": "handle_redemption",
+        "to": "add_new_audit_trail",
+        "connection": {
+          "output": "redemption_id",
+          "input": "reference_id"
+        }
+      }
+    ],
+    "num_edges": 9
+  }
+}
