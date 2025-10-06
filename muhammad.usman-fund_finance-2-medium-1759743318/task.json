@@ -1,0 +1,245 @@
+{
+  "env": "fund_finance",
+  "model_provider": "fireworks",
+  "model": "qwen3-coder-480b-a35b-instruct",
+  "num_trials": 3,
+  "temperature": 1,
+  "interface_num": 2,
+  "task": {
+    "user_id": "15",
+    "instruction": "You are acting as a compliance officer with email 'craigramirez@investment.com'. You have received a request to onboard a new investor named 'Olivia Carter', who is an accredited investor, contact email is 'oliviacarter@finvest.com' and whose source of funds is external investment. After confirming your compliance officer approval, proceed to create the investor profile, ensuring all required details are validated. Once the investor is successfully onboarded, check if they have an active portfolio. If no portfolio exists, and with fund manager approval, immediately create a new active portfolio for this investor. Log both the onboarding and portfolio creation actions for audit purposes. If any required information or approval is missing, or if any step fails, halt the process and report the error as per standard operating procedures.",
+    "actions": [
+      {
+        "name": "search_user_entities",
+        "arguments": {
+          "entity_type": "users",
+          "filters": {
+            "email": "craigramirez@investment.com",
+            "role": "compliance_officer"
+          }
+        },
+        "output": {
+          "count": 1,
+          "entity_type": "users",
+          "results": [
+            {
+              "created_at": "2025-04-30T15:16:35",
+              "email": "craigramirez@investment.com",
+              "first_name": "Craig",
+              "last_name": "Ramirez",
+              "role": "compliance_officer",
+              "status": "active",
+              "timezone": "UTC",
+              "updated_at": "2025-07-10T11:31:03",
+              "user_id": "15"
+            }
+          ],
+          "success": true
+        }
+      },
+      {
+        "name": "check_approval",
+        "arguments": {
+          "action": "investor_onboarding",
+          "requester_email": "craigramirez@investment.com"
+        },
+        "output": {
+          "approval_valid": true,
+          "message": "Role 'compliance_officer' is directly authorized for action 'investor_onboarding'"
+        }
+      },
+      {
+        "name": "add_investor",
+        "arguments": {
+          "accreditation_status": "accredited",
+          "compliance_officer_approval": true,
+          "contact_email": "oliviacarter@finvest.com",
+          "legal_name": "Olivia Carter",
+          "source_of_funds": "external_investment"
+        },
+        "output": {
+          "accreditation_status": "accredited",
+          "address": null,
+          "contact_email": "oliviacarter@finvest.com",
+          "country": null,
+          "created_at": "2025-10-01T00:00:00",
+          "date_of_incorporation": null,
+          "investor_id": "176",
+          "name": "Olivia Carter",
+          "registration_number": null,
+          "source_of_funds": "external_investment",
+          "status": "onboarded",
+          "tax_id": null
+        }
+      },
+      {
+        "name": "add_new_audit_trail",
+        "arguments": {
+          "action": "create",
+          "reference_id": "176",
+          "reference_type": "investor"
+        },
+        "output": {
+          "action": "create",
+          "audit_trail_id": "3501",
+          "created_at": "2025-10-01T00:00:00",
+          "field_name": null,
+          "new_value": null,
+          "old_value": null,
+          "reference_id": "176",
+          "reference_type": "investor"
+        }
+      },
+      {
+        "name": "search_portfolio_entities",
+        "arguments": {
+          "entity_type": "portfolios",
+          "filters": {
+            "investor_id": "176",
+            "status": "active"
+          }
+        },
+        "output": {
+          "count": 0,
+          "entity_type": "portfolios",
+          "results": [],
+          "success": true
+        }
+      },
+      {
+        "name": "handle_portfolio",
+        "arguments": {
+          "action": "create",
+          "portfolio_data": {
+            "investor_id": "176",
+            "status": "active",
+            "fund_manager_approval": true
+          }
+        },
+        "output": {
+          "action": "create",
+          "message": "Portfolio 176 created successfully for investor 176",
+          "portfolio_data": {
+            "created_at": "2025-10-01T12:00:00",
+            "investor_id": "176",
+            "portfolio_id": "176",
+            "status": "active",
+            "updated_at": "2025-10-01T12:00:00"
+          },
+          "portfolio_id": "176",
+          "success": true
+        }
+      },
+      {
+        "name": "add_new_audit_trail",
+        "arguments": {
+          "action": "create",
+          "reference_id": "176",
+          "reference_type": "portfolio"
+        },
+        "output": {
+          "action": "create",
+          "audit_trail_id": "3502",
+          "created_at": "2025-10-01T00:00:00",
+          "field_name": null,
+          "new_value": null,
+          "old_value": null,
+          "reference_id": "176",
+          "reference_type": "portfolio"
+        }
+      }
+    ],
+    "outputs": ["176", "3501", "3502"],
+    "edges": [
+      {
+        "from": "instruction",
+        "to": "search_user_entities",
+        "connection": {
+          "output": "email, role",
+          "input": "email, role"
+        }
+      },
+      {
+        "from": "instruction",
+        "to": "check_approval",
+        "connection": {
+          "output": "action, requester_email",
+          "input": "action, requester_email"
+        }
+      },
+      {
+        "from": "check_approval",
+        "to": "add_investor",
+        "connection": {
+          "output": "approval_valid",
+          "input": "compliance_officer_approval"
+        }
+      },
+      {
+        "from": "instruction",
+        "to": "add_investor",
+        "connection": {
+          "output": "accreditation_status, contact_email, legal_name, source_of_funds",
+          "input": "accreditation_status, contact_email, legal_name, source_of_funds"
+        }
+      },
+      {
+        "from": "add_investor",
+        "to": "add_new_audit_trail",
+        "connection": {
+          "output": "investor_id",
+          "input": "reference_id"
+        }
+      },
+      {
+        "from": "instruction",
+        "to": "add_new_audit_trail",
+        "connection": {
+          "output": "action, reference_type",
+          "input": "action, reference_type"
+        }
+      },
+      {
+        "from": "add_investor",
+        "to": "search_portfolio_entities",
+        "connection": {
+          "output": "investor_id",
+          "input": "investor_id"
+        }
+      },
+      {
+        "from": "instruction",
+        "to": "search_portfolio_entities",
+        "connection": {
+          "output": "entity_type, status",
+          "input": "entity_type, status"
+        }
+      },
+      {
+        "from": "add_investor",
+        "to": "handle_portfolio",
+        "connection": {
+          "output": "investor_id",
+          "input": "investor_id"
+        }
+      },
+      {
+        "from": "instruction",
+        "to": "handle_portfolio",
+        "connection": {
+          "output": "action, status, fund_manager_approval",
+          "input": "action, status, fund_manager_approval"
+        }
+      },
+      {
+        "from": "handle_portfolio",
+        "to": "add_new_audit_trail",
+        "connection": {
+          "output": "portfolio_id",
+          "input": "reference_id"
+        }
+      }
+    ],
+    "num_edges": 11
+  }
+}
