@@ -296,7 +296,7 @@
         "to": "search_user_entities",
         "connection": {
           "output": "email, role",
-          "input": "email, role"
+          "input": "filters.email, filters.role"
         }
       },
       {
@@ -304,7 +304,7 @@
         "to": "search_instrument_entities",
         "connection": {
           "output": "ticker, name, status",
-          "input": "ticker, name, status"
+          "input": "filters.ticker, filters.name, filters.status"
         }
       },
       {
@@ -312,7 +312,7 @@
         "to": "search_fund_entities",
         "connection": {
           "output": "name, status",
-          "input": "name, status"
+          "input": "filters.name, filters.status"
         }
       },
       {
@@ -360,7 +360,7 @@
         "to": "search_valuation_entities",
         "connection": {
           "output": "price_date",
-          "input": "price_date"
+          "input": "filters.price_date"
         }
       },
       {
@@ -368,7 +368,7 @@
         "to": "handle_instrument_price",
         "connection": {
           "output": "results[0].price_id",
-          "input": "price_id"
+          "input": "filters.price_id"
         }
       },
       {
@@ -400,7 +400,7 @@
         "to": "handle_notifications",
         "connection": {
           "output": "type, class",
-          "input": "type, class"
+          "input": "notification_data.type, notification_data.class"
         }
       },
       {
