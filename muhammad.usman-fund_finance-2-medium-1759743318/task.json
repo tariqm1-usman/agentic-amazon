@@ -6,16 +6,16 @@
   "temperature": 1,
   "interface_num": 2,
   "task": {
-    "user_id": "15",
-    "instruction": "You are acting as a compliance officer with email 'craigramirez@investment.com'. You have received a request to onboard a new investor named 'Olivia Carter', who is an accredited investor, contact email is 'oliviacarter@finvest.com' and whose source of funds is external investment. After confirming your compliance officer approval, proceed to create the investor profile, ensuring all required details are validated. Once the investor is successfully onboarded, check if they have an active portfolio. If no portfolio exists, and with fund manager approval, immediately create a new active portfolio for this investor. Log both the onboarding and portfolio creation actions for audit purposes. If any required information or approval is missing, or if any step fails, halt the process and report the error as per standard operating procedures.",
+    "user_id": "31",
+    "instruction": "You are acting as a fund manager with email 'jennifermaldonado@gmail.com'. You have received a request to onboard a new investor named 'Olivia Carter', who is an accredited investor, contact email is 'oliviacarter@finvest.com' and whose source of funds is external investment. Create the investor profile, ensuring all required details are validated.",
     "actions": [
       {
         "name": "search_user_entities",
         "arguments": {
           "entity_type": "users",
           "filters": {
-            "email": "craigramirez@investment.com",
-            "role": "compliance_officer"
+            "email": "jennifermaldonado@gmail.com",
+            "role": "fund_manager"
           }
         },
         "output": {
@@ -23,15 +23,15 @@
           "entity_type": "users",
           "results": [
             {
-              "created_at": "2025-04-30T15:16:35",
-              "email": "craigramirez@investment.com",
-              "first_name": "Craig",
-              "last_name": "Ramirez",
-              "role": "compliance_officer",
+              "created_at": "2024-11-28T06:56:51",
+              "email": "jennifermaldonado@gmail.com",
+              "first_name": "Jennifer",
+              "last_name": "Maldonado",
+              "role": "fund_manager",
               "status": "active",
-              "timezone": "UTC",
-              "updated_at": "2025-07-10T11:31:03",
-              "user_id": "15"
+              "timezone": "Asia/Tokyo",
+              "updated_at": "2025-03-11T21:56:18",
+              "user_id": "31"
             }
           ],
           "success": true
@@ -41,11 +41,11 @@
         "name": "check_approval",
         "arguments": {
           "action": "investor_onboarding",
-          "requester_email": "craigramirez@investment.com"
+          "requester_email": "jennifermaldonado@gmail.com"
         },
         "output": {
           "approval_valid": true,
-          "message": "Role 'compliance_officer' is directly authorized for action 'investor_onboarding'"
+          "approved_by": "compliance_officer"
         }
       },
       {
@@ -149,21 +149,25 @@
         }
       }
     ],
-    "outputs": ["176", "3501", "3502"],
+    "outputs": [
+      "176",
+      "3501",
+      "3502"
+    ],
     "edges": [
       {
         "from": "instruction",
         "to": "search_user_entities",
         "connection": {
           "output": "email, role",
-          "input": "email, role"
+          "input": "filters.email, filters.role"
         }
       },
       {
         "from": "instruction",
         "to": "check_approval",
         "connection": {
-          "output": "action, requester_email",
+          "output": "action, email",
           "input": "action, requester_email"
         }
       },
@@ -172,7 +176,7 @@
         "to": "add_investor",
         "connection": {
           "output": "approval_valid",
-          "input": "compliance_officer_approval"
+          "input": "fund_manager_approval"
         }
       },
       {
@@ -204,7 +208,7 @@
         "to": "search_portfolio_entities",
         "connection": {
           "output": "investor_id",
-          "input": "investor_id"
+          "input": "filters.investor_id"
         }
       },
       {
@@ -212,7 +216,7 @@
         "to": "search_portfolio_entities",
         "connection": {
           "output": "entity_type, status",
-          "input": "entity_type, status"
+          "input": "entity_type, filters.status"
         }
       },
       {
@@ -220,23 +224,23 @@
         "to": "handle_portfolio",
         "connection": {
           "output": "investor_id",
-          "input": "investor_id"
+          "input": "portfolio_data.investor_id"
+        }
+      },
+      {
+        "from": "check_approval",
+        "to": "handle_portfolio",
+        "connection": {
+          "output": "approval_valid",
+          "input": "portfolio_data.fund_manager_approval"
         }
       },
       {
         "from": "instruction",
         "to": "handle_portfolio",
         "connection": {
-          "output": "action, status, fund_manager_approval",
-          "input": "action, status, fund_manager_approval"
-        }
-      },
-      {
-        "from": "handle_portfolio",
-        "to": "add_new_audit_trail",
-        "connection": {
-          "output": "portfolio_id",
-          "input": "reference_id"
+          "output": "action, status",
+          "input": "action, portfolio_data.status"
         }
       }
     ],
