@@ -1,0 +1,433 @@
+{
+  "env": "fund_finance",
+  "model_provider": "fireworks",
+  "model": "qwen3-coder-480b-a35b-instruct",
+  "num_trials": 3,
+  "temperature": 1,
+  "interface_num": 2,
+  "task": {
+    "user_id": "31",
+    "instruction": "You are Jennifer Maldonado (jennifermaldonado@gmail.com), the fund manager for the Thornton-Shepherd Income Fund. On 2025-06-23, you need to update the market prices for the Lamb-Weber Group instrument (ticker: NOC6) held by this fund. Set the open price to $102.5, high to $104, low to $101.8, and close to $103.2. This update is authorized by both you and compliance officer Craig Ramirez (craigramirez@investment.com). Ensure the fund and instrument are active, and that notifications about this price change are sent to both your email and Craig Ramirez’s email.",
+    "actions": [
+      {
+        "name": "search_user_entities",
+        "arguments": {
+          "entity_type": "users",
+          "filters": {
+            "email": "jennifermaldonado@gmail.com",
+            "role": "fund_manager"
+          }
+        },
+        "output": {
+          "count": 1,
+          "entity_type": "users",
+          "results": [
+            {
+              "created_at": "2024-11-28T06:56:51",
+              "email": "jennifermaldonado@gmail.com",
+              "first_name": "Jennifer",
+              "last_name": "Maldonado",
+              "role": "fund_manager",
+              "status": "active",
+              "timezone": "Asia/Tokyo",
+              "updated_at": "2025-03-11T21:56:18",
+              "user_id": "31"
+            }
+          ],
+          "success": true
+        }
+      },
+      {
+        "name": "search_user_entities",
+        "arguments": {
+          "entity_type": "users",
+          "filters": {
+            "email": "craigramirez@investment.com",
+            "role": "compliance_officer"
+          }
+        },
+        "output": {
+          "count": 1,
+          "entity_type": "users",
+          "results": [
+            {
+              "created_at": "2025-04-30T15:16:35",
+              "email": "craigramirez@investment.com",
+              "first_name": "Craig",
+              "last_name": "Ramirez",
+              "role": "compliance_officer",
+              "status": "active",
+              "timezone": "UTC",
+              "updated_at": "2025-07-10T11:31:03",
+              "user_id": "15"
+            }
+          ],
+          "success": true
+        }
+      },
+      {
+        "name": "search_instrument_entities",
+        "arguments": {
+          "entity_type": "instruments",
+          "filters": {
+            "ticker": "NOC6",
+            "name": "Lamb-Weber Group",
+            "status": "active"
+          }
+        },
+        "output": {
+          "count": 1,
+          "entity_type": "instruments",
+          "results": [
+            {
+              "instrument_id": "4",
+              "instrument_type": "derivatives",
+              "name": "Lamb-Weber Group",
+              "status": "active",
+              "ticker": "NOC6"
+            }
+          ],
+          "success": true
+        }
+      },
+      {
+        "name": "search_fund_entities",
+        "arguments": {
+          "entity_type": "funds",
+          "filters": {
+            "name": "Thornton-Shepherd Income Fund",
+            "status": "open"
+          }
+        },
+        "output": {
+          "count": 1,
+          "entity_type": "funds",
+          "results": [
+            {
+              "created_at": "2023-12-24T09:42:57",
+              "fund_id": "92",
+              "fund_type": "infrastructure_funds",
+              "manager_id": "99",
+              "name": "Thornton-Shepherd Income Fund",
+              "size": 371392238.37,
+              "status": "open",
+              "updated_at": "2025-07-24T20:01:33"
+            }
+          ],
+          "success": true
+        }
+      },
+      {
+        "name": "search_portfolio_entities",
+        "arguments": {
+          "entity_type": "portfolio_holdings",
+          "filters": {
+            "fund_id": "92",
+            "instrument_id": "4"
+          }
+        },
+        "output": {
+          "count": 0,
+          "entity_type": "portfolio_holdings",
+          "results": [],
+          "success": true
+        }
+      },
+      {
+        "name": "check_approval",
+        "arguments": {
+          "action": "instrument_price_updates",
+          "requester_email": "jennifermaldonado@gmail.com"
+        },
+        "output": {
+          "approval_valid": true,
+          "message": "Role 'fund_manager' is directly authorized for action 'instrument_price_updates'"
+        }
+      },
+      {
+        "name": "check_approval",
+        "arguments": {
+          "action": "instrument_price_updates",
+          "requester_email": "craigramirez@investment.com"
+        },
+        "output": {
+          "approval_valid": true,
+          "approved_by": [
+            "fund_manager",
+            "compliance_officer"
+          ]
+        }
+      },
+      {
+        "name": "search_valuation_entities",
+        "arguments": {
+          "entity_type": "instrument_prices",
+          "filters": {
+            "instrument_id": "4",
+            "price_date": "2025-06-23"
+          }
+        },
+        "output": {
+          "count": 1,
+          "entity_type": "instrument_prices",
+          "results": [
+            {
+              "close_price": 66.8887,
+              "high_price": 68.0099,
+              "instrument_id": "4",
+              "low_price": 62.1842,
+              "open_price": 65.5137,
+              "price_date": "2025-06-23",
+              "price_id": "45"
+            }
+          ],
+          "success": true
+        }
+      },
+      {
+        "name": "handle_instrument_price",
+        "arguments": {
+          "action": "update",
+          "price_data": {
+            "open_price": 102.5,
+            "high_price": 104,
+            "low_price": 101.8,
+            "close_price": 103.2,
+            "fund_manager_approval": true,
+            "compliance_officer_approval": true
+          },
+          "price_id": "45"
+        },
+        "output": {
+          "action": "update",
+          "message": "Instrument price 45 updated successfully",
+          "price_data": {
+            "close_price": 103.2,
+            "high_price": 104,
+            "instrument_id": "4",
+            "low_price": 101.8,
+            "open_price": 102.5,
+            "price_date": "2025-06-23",
+            "price_id": "45"
+          },
+          "price_id": "45",
+          "success": true
+        }
+      },
+      {
+        "name": "handle_notifications",
+        "arguments": {
+          "action": "create",
+          "notification_data": {
+            "email": "jennifermaldonado@gmail.com",
+            "type": "alert",
+            "class": "funds",
+            "reference_id": "45"
+          }
+        },
+        "output": {
+          "action": "create",
+          "message": "Notification 1501 created successfully for jennifermaldonado@gmail.com",
+          "notification_data": {
+            "class": "funds",
+            "created_at": "2025-10-01T12:00:00",
+            "email": "jennifermaldonado@gmail.com",
+            "notification_id": "1501",
+            "reference_id": "45",
+            "sent_at": null,
+            "status": "pending",
+            "type": "alert"
+          },
+          "notification_id": "1501",
+          "success": true
+        }
+      },
+      {
+        "name": "handle_notifications",
+        "arguments": {
+          "action": "create",
+          "notification_data": {
+            "email": "craigramirez@investment.com",
+            "type": "alert",
+            "class": "funds",
+            "reference_id": "45"
+          }
+        },
+        "output": {
+          "action": "create",
+          "message": "Notification 1502 created successfully for craigramirez@investment.com",
+          "notification_data": {
+            "class": "funds",
+            "created_at": "2025-10-01T12:00:00",
+            "email": "craigramirez@investment.com",
+            "notification_id": "1502",
+            "reference_id": "45",
+            "sent_at": null,
+            "status": "pending",
+            "type": "alert"
+          },
+          "notification_id": "1502",
+          "success": true
+        }
+      },
+      {
+        "name": "add_new_audit_trail",
+        "arguments": {
+          "action": "update",
+          "reference_id": "45",
+          "reference_type": "instrument_price"
+        },
+        "output": {
+          "action": "update",
+          "audit_trail_id": "3501",
+          "created_at": "2025-10-01T00:00:00",
+          "field_name": null,
+          "new_value": null,
+          "old_value": null,
+          "reference_id": "45",
+          "reference_type": "instrument_price"
+        }
+      }
+    ],
+    "outputs": ["4", "45", "1501", "1502"],
+    "edges": [
+      {
+        "from": "instruction",
+        "to": "search_user_entities",
+        "connection": {
+          "output": "email, role",
+          "input": "filters.email, filters.role"
+        }
+      },
+      {
+        "from": "instruction",
+        "to": "search_instrument_entities",
+        "connection": {
+          "output": "ticker, name, status",
+          "input": "filters.ticker, filters.name, filters.status"
+        }
+      },
+      {
+        "from": "instruction",
+        "to": "search_fund_entities",
+        "connection": {
+          "output": "name, status",
+          "input": "filters.name, filters.status"
+        }
+      },
+      {
+        "from": "search_fund_entities",
+        "to": "search_portfolio_entities",
+        "connection": {
+          "output": "results[0].fund_id",
+          "input": "fund_id"
+        }
+      },
+      {
+        "from": "search_instrument_entities",
+        "to": "search_portfolio_entities",
+        "connection": {
+          "output": "results[0].instrument_id",
+          "input": "instrument_id"
+        }
+      },
+      {
+        "from": "instruction",
+        "to": "check_approval",
+        "connection": {
+          "output": "action",
+          "input": "action"
+        }
+      },
+      {
+        "from": "search_user_entities",
+        "to": "check_approval",
+        "connection": {
+          "output": "results[0].email",
+          "input": "requester_email"
+        }
+      },
+      {
+        "from": "search_instrument_entities",
+        "to": "search_valuation_entities",
+        "connection": {
+          "output": "results[0].instrument_id",
+          "input": "instrument_id"
+        }
+      },
+      {
+        "from": "instruction",
+        "to": "search_valuation_entities",
+        "connection": {
+          "output": "price_date",
+          "input": "filters.price_date"
+        }
+      },
+      {
+        "from": "search_valuation_entities",
+        "to": "handle_instrument_price",
+        "connection": {
+          "output": "results[0].price_id",
+          "input": "filters.price_id"
+        }
+      },
+      {
+        "from": "instruction",
+        "to": "handle_instrument_price",
+        "connection": {
+          "output": "open_price, high_price, low_price, close_price",
+          "input": "open_price, high_price, low_price, close_price"
+        }
+      },
+      {
+        "from": "check_approval",
+        "to": "handle_instrument_price",
+        "connection": {
+          "output": "approval_valid, approval_valid",
+          "input": "fund_manager_approval, compliance_officer_approval"
+        }
+      },
+      {
+        "from": "search_user_entities",
+        "to": "handle_notifications",
+        "connection": {
+          "output": "results[0].email",
+          "input": "email"
+        }
+      },
+      {
+        "from": "instruction",
+        "to": "handle_notifications",
+        "connection": {
+          "output": "type, class",
+          "input": "notification_data.type, notification_data.class"
+        }
+      },
+      {
+        "from": "handle_instrument_price",
+        "to": "handle_notifications",
+        "connection": {
+          "output": "price_id",
+          "input": "reference_id"
+        }
+      },
+      {
+        "from": "instruction",
+        "to": "add_new_audit_trail",
+        "connection": {
+          "output": "action, reference_type",
+          "input": "action, reference_type"
+        }
+      },
+      {
+        "from": "handle_instrument_price",
+        "to": "add_new_audit_trail",
+        "connection": {
+          "output": "price_id",
+          "input": "reference_id"
+        }
+      }
+    ],
+    "num_edges": 17
+  }
+}
