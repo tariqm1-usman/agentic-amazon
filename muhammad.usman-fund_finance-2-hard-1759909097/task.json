@@ -270,7 +270,7 @@
       "to": "search_investment_flow_entities",
       "connection": {
         "output": "results[0].investor_id",
-        "input": "investor_id"
+        "input": "filters.investor_id"
       }
     },
     {
@@ -278,7 +278,7 @@
       "to": "search_investment_flow_entities",
       "connection": {
         "output": "results[0].fund_id",
-        "input": "fund_id"
+        "input": "filters.fund_id"
       }
     },
     {
@@ -286,7 +286,7 @@
       "to": "handle_subscription",
       "connection": {
         "output": "results[0].subscription_id, results[0].investor_id, results[0].fund_id",
-        "input": "subscription_id, investor_id, fund_id"
+        "input": "subscription_id, subscription_data.investor_id, subscription_data.fund_id"
       }
     },
     {
@@ -302,7 +302,7 @@
       "to": "handle_subscription",
       "connection": {
         "output": "results[0].user_id",
-        "input": "request_assigned_to"
+        "input": "subscription_data.request_assigned_to"
       }
     },
     {
