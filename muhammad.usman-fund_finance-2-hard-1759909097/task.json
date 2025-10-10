@@ -7,7 +7,7 @@
   "interface_num": 2,
   "task": {
     "user_id": "51",
-    "instruction": "You are John Kennedy (john.kennedy@outlook.com), a fund manager. You want to update the subscription for the investor Evans, Jackson and Sandoval to USD 2,000,000 in the Soto, Brown and Hernandez Strategic Fund, effective October 9, 2025. The designated compliance officer is Carol Burns (carol.burns@outlook.com).",
+    "instruction": "You are John Kennedy (john.kennedy@outlook.com), a fund manager. You want to update the subscription for the investor Evans, Jackson and Sandoval to USD 2,000,000 in the Soto, Brown and Hernandez Strategic Fund, effective October 9, 2025. Get approval from the compliance officer, Carol Burns (carol.burns@outlook.com).",
     "actions": [
       {
         "name": "search_user_entities",
