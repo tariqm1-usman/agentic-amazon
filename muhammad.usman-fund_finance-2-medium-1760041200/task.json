@@ -1,0 +1,310 @@
+{
+  "env": "fund_finance",
+  "model_provider": "fireworks",
+  "model": "qwen3-coder-480b-a35b-instruct",
+  "num_trials": 3,
+  "temperature": 1,
+  "interface_num": 2,
+  "task": {
+    "user_id": "99",
+    "instruction": "You are Kevin Pope (kevinpope@outlook.com), the fund manager for the Thornton-Shepherd Income Fund. On 2025-06-23, you need to update the market prices for the Lamb-Weber Group instrument. Set the open price to $102.5, high to $104, low to $101.8, and close to $103.2. Craig Ramirez (craigramirez@investment.com) designated as compliance officer.",
+    "actions": [
+      {
+        "name": "search_user_entities",
+        "arguments": {
+          "entity_type": "users",
+          "filters": {
+            "email": "kevinpope@outlook.com",
+            "role": "fund_manager"
+          }
+        },
+        "output": {
+          "count": 1,
+          "entity_type": "users",
+          "results": [
+            {
+              "created_at": "2023-08-05T16:37:03",
+              "email": "kevinpope@outlook.com",
+              "first_name": "Kevin",
+              "last_name": "Pope",
+              "role": "fund_manager",
+              "status": "active",
+              "timezone": "UTC",
+              "updated_at": "2024-01-25T20:12:49",
+              "user_id": "99"
+            }
+          ],
+          "success": true
+        }
+      },
+      {
+        "name": "search_user_entities",
+        "arguments": {
+          "entity_type": "users",
+          "filters": {
+            "email": "craigramirez@investment.com",
+            "role": "compliance_officer"
+          }
+        },
+        "output": {
+          "count": 1,
+          "entity_type": "users",
+          "results": [
+            {
+              "created_at": "2025-04-30T15:16:35",
+              "email": "craigramirez@investment.com",
+              "first_name": "Craig",
+              "last_name": "Ramirez",
+              "role": "compliance_officer",
+              "status": "active",
+              "timezone": "UTC",
+              "updated_at": "2025-07-10T11:31:03",
+              "user_id": "15"
+            }
+          ],
+          "success": true
+        }
+      },
+      {
+        "name": "check_approval",
+        "arguments": {
+          "action": "instrument_price_updates",
+          "requester_email": "kevinpope@outlook.com"
+        },
+        "output": {
+          "approval_valid": true,
+          "message": "Role 'fund_manager' is directly authorized for action 'instrument_price_updates'"
+        }
+      },
+      {
+        "name": "check_approval",
+        "arguments": {
+          "action": "instrument_price_updates",
+          "requester_email": "craigramirez@investment.com"
+        },
+        "output": {
+          "approval_valid": true,
+          "approved_by": [
+            "fund_manager",
+            "compliance_officer"
+          ]
+        }
+      },
+      {
+        "name": "search_fund_entities",
+        "arguments": {
+          "entity_type": "funds",
+          "filters": {
+            "name": "Thornton-Shepherd Income Fund"
+          }
+        },
+        "output": {
+          "count": 1,
+          "entity_type": "funds",
+          "results": [
+            {
+              "created_at": "2023-12-24T09:42:57",
+              "fund_id": "92",
+              "fund_type": "infrastructure_funds",
+              "manager_id": "99",
+              "name": "Thornton-Shepherd Income Fund",
+              "size": 371392238.37,
+              "status": "open",
+              "updated_at": "2025-07-24T20:01:33"
+            }
+          ],
+          "success": true
+        }
+      },
+      {
+        "name": "search_instrument_entities",
+        "arguments": {
+          "entity_type": "instruments",
+          "filters": {
+            "name": "Lamb-Weber Group"
+          }
+        },
+        "output": {
+          "count": 1,
+          "entity_type": "instruments",
+          "results": [
+            {
+              "instrument_id": "4",
+              "instrument_type": "derivatives",
+              "name": "Lamb-Weber Group",
+              "status": "active",
+              "ticker": "NOC6"
+            }
+          ],
+          "success": true
+        }
+      },
+      {
+        "name": "search_valuation_entities",
+        "arguments": {
+          "entity_type": "instrument_prices",
+          "filters": {
+            "instrument_id": "4",
+            "price_date": "2025-06-23"
+          }
+        },
+        "output": {
+          "count": 1,
+          "entity_type": "instrument_prices",
+          "results": [
+            {
+              "close_price": 66.8887,
+              "high_price": 68.0099,
+              "instrument_id": "4",
+              "low_price": 62.1842,
+              "open_price": 65.5137,
+              "price_date": "2025-06-23",
+              "price_id": "45"
+            }
+          ],
+          "success": true
+        }
+      },
+      {
+        "name": "handle_instrument_price",
+        "arguments": {
+          "action": "update",
+          "price_data": {
+            "open_price": 102.5,
+            "high_price": 104.0,
+            "low_price": 101.8,
+            "close_price": 103.2,
+            "fund_manager_approval": true,
+            "compliance_officer_approval": true
+          },
+          "price_id": "45"
+        },
+        "output": {
+          "action": "update",
+          "message": "Instrument price 45 updated successfully",
+          "price_data": {
+            "close_price": 103.2,
+            "high_price": 104.0,
+            "instrument_id": "4",
+            "low_price": 101.8,
+            "open_price": 102.5,
+            "price_date": "2025-06-23",
+            "price_id": "45"
+          },
+          "price_id": "45",
+          "success": true
+        }
+      },
+      {
+        "name": "add_new_audit_trail",
+        "arguments": {
+          "action": "update",
+          "reference_id": "45",
+          "reference_type": "instrument_price"
+        },
+        "output": {
+          "action": "update",
+          "audit_trail_id": "3501",
+          "created_at": "2025-10-01T00:00:00",
+          "field_name": null,
+          "new_value": null,
+          "old_value": null,
+          "reference_id": "45",
+          "reference_type": "instrument_price"
+        }
+      }
+    ],
+    "outputs": ["92", "99", "4"],
+    "edges": [
+      {
+        "from": "instruction",
+        "to": "search_user_entities",
+        "connection": {
+          "output": "entity_type, email, role",
+          "input": "entity_type, filters.email, filters.role"
+        }
+      },
+      {
+        "from": "instruction",
+        "to": "check_approval",
+        "connection": {
+          "output": "action, email",
+          "input": "action, requester_email"
+        }
+      },
+      {
+        "from": "instruction",
+        "to": "search_fund_entities",
+        "connection": {
+          "output": "entity_type, name",
+          "input": "entity_type, filters.name"
+        }
+      },
+      {
+        "from": "instruction",
+        "to": "search_instrument_entities",
+        "connection": {
+          "output": "entity_type, name",
+          "input": "entity_type, filters.name"
+        }
+      },
+      {
+        "from": "search_instrument_entities",
+        "to": "search_valuation_entities",
+        "connection": {
+          "output": "results[0].instrument_id",
+          "input": "filters.instrument_id"
+        }
+      },
+      {
+        "from": "instruction",
+        "to": "search_valuation_entities",
+        "connection": {
+          "output": "entity_type, price_date",
+          "input": "entity_type, filters.price_date"
+        }
+      },
+      {
+        "from": "search_valuation_entities",
+        "to": "handle_instrument_price",
+        "connection": {
+          "output": "results[0].price_id",
+          "input": "price_id"
+        }
+      },
+      {
+        "from": "check_approval",
+        "to": "handle_instrument_price",
+        "connection": {
+          "output": "approval_valid, approval_valid",
+          "input": "price_data.fund_manager_approval, price_data.compliance_officer_approval"
+        }
+      },
+      {
+        "from": "instruction",
+        "to": "handle_instrument_price",
+        "connection": {
+          "output": "action, open_price, high_price, low_price, close_price",
+          "input": "action, price_data.open_price, price_data.high_price, price_data.low_price, price_data.close_price"
+        }
+      },
+      {
+        "from": "handle_instrument_price",
+        "to": "add_new_audit_trail",
+        "connection": {
+          "output": "action, price_id",
+          "input": "action, reference_id"
+        }
+      },
+      {
+        "from": "instruction",
+        "to": "add_new_audit_trail",
+        "connection": {
+          "output": "reference_type",
+          "input": "reference_type"
+        }
+      }
+    ],
+    "num_edges": 11
+  }
+}
