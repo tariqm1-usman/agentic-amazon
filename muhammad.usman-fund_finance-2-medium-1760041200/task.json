@@ -7,7 +7,7 @@
   "interface_num": 2,
   "task": {
     "user_id": "99",
-    "instruction": "You are Kevin Pope (kevinpope@outlook.com), the fund manager for the Thornton-Shepherd Income Fund. On 2025-06-23, you need to update the market prices for the Lamb-Weber Group instrument. Set the open price to $66 and get approval from compliance officer Craig Ramirez.",
+    "instruction": "You are Kevin Pope (kevinpope@outlook.com), the fund manager for the Thornton-Shepherd Income Fund. On 2025-06-23, you need to update the market prices for the Lamb-Weber Group instrument. Get approval from compliance officer Craig Ramirez and set the open price to $66.",
     "actions": [
       {
         "name": "search_user_entities",
