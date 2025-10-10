@@ -7,7 +7,7 @@
   "interface_num": 2,
   "task": {
     "user_id": "51",
-    "instruction": "You are John Kennedy (john.kennedy@outlook.com), a fund manager. You want to update the subscription for the investor Evans, Jackson and Sandoval to USD 2,000,000 in the Soto, Brown and Hernandez Strategic Fund, effective October 9, 2025.",
+    "instruction": "You are John Kennedy (john.kennedy@outlook.com), a fund manager. You want to update the subscription for the investor Evans, Jackson and Sandoval to USD 2,000,000 in the Soto, Brown and Hernandez Strategic Fund.",
     "actions": [
       {
         "name": "search_user_entities",
@@ -137,9 +137,7 @@
         "arguments": {
           "action": "update",
           "subscription_data": {
-            "investor_id": "96",
-            "fund_id": "53",
-            "request_date": "2025-10-09",
+            "amount": 2000000,
             "fund_manager_approval": true,
             "compliance_officer_approval": true
           },
@@ -149,7 +147,7 @@
           "action": "update",
           "message": "Subscription 78 updated successfully.",
           "subscription_data": {
-            "amount": 3752102.02,
+            "amount": 2000000,
             "approval_date": "2025-02-06",
             "fund_id": "53",
             "investor_id": "96",
@@ -169,7 +167,7 @@
           "action": "update",
           "field_name": "amount",
           "new_value": "2000000",
-          "old_value": "3752102.02",
+          "old_value": null,
           "reference_id": "78",
           "reference_type": "subscription"
         },
@@ -179,7 +177,7 @@
           "created_at": "2025-10-01T00:00:00",
           "field_name": "amount",
           "new_value": "2000000",
-          "old_value": "3752102.02",
+          "old_value": null,
           "reference_id": "78",
           "reference_type": "subscription"
         }
@@ -247,40 +245,32 @@
         "from": "search_investment_flow_entities",
         "to": "handle_subscription",
         "connection": {
-          "output": "results[0].subscription_id, results[0].investor_id, results[0].fund_id",
-          "input": "subscription_id, subscription_data.investor_id, subscription_data.fund_id"
+          "output": "results[0].subscription_id",
+          "input": "subscription_id"
         }
       },
       {
         "from": "instruction",
         "to": "handle_subscription",
         "connection": {
-          "output": "action, request_date",
-          "input": "action, request_date"
+          "output": "action",
+          "input": "action"
         }
       },
       {
-      "from": "check_approval",
-      "to": "handle_subscription",
-      "connection": {
-        "output": "approval_valid, approval_valid",
-        "input": "subscription_data.fund_manager_approval, subscription_data.compliance_officer_approval"
-      }
-    },
+        "from": "check_approval",
+        "to": "handle_subscription",
+        "connection": {
+          "output": "approval_valid, approval_valid",
+          "input": "subscription_data.fund_manager_approval, subscription_data.compliance_officer_approval"
+        }
+      },
       {
         "from": "instruction",
         "to": "add_new_audit_trail",
         "connection": {
           "output": "action, field_name, new_value, reference_type",
           "input": "action, field_name, new_value, reference_type"
-        }
-      },
-      {
-        "from": "search_investment_flow_entities",
-        "to": "add_new_audit_trail",
-        "connection": {
-          "output": "results[0].amount",
-          "input": "old_value"
         }
       },
       {
