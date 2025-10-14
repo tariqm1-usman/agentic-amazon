@@ -1,0 +1,333 @@
+{
+  "env": "fund_finance",
+  "model_provider": "fireworks",
+  "model": "qwen3-coder-480b-a35b-instruct",
+  "num_trials": 3,
+  "temperature": 1,
+  "interface_num": 2,
+  "task": {
+    "user_id": "5",
+    "instruction": "You are Anthony Gonzalez, a finance officer. On July 10, 2025 you need to locate the earliest-due issued invoice for investor “Garcia and Sons” in fund “Hudson-Barnett Value Fund” mark it as paid.",
+    "actions": [
+      {
+        "name": "search_user_entities",
+        "arguments": {
+          "entity_type": "users",
+          "filters": {
+            "first_name": "Anthony",
+            "last_name": "Gonzalez",
+            "role": "finance_officer"
+          }
+        },
+        "output": {
+          "count": 1,
+          "entity_type": "users",
+          "results": [
+            {
+              "created_at": "2025-05-22T16:41:26",
+              "email": "anthonygonzalez@gmail.com",
+              "first_name": "Anthony",
+              "last_name": "Gonzalez",
+              "role": "finance_officer",
+              "status": "active",
+              "timezone": "America/Chicago",
+              "updated_at": "2025-07-29T18:53:46",
+              "user_id": "5"
+            }
+          ],
+          "success": true
+        }
+      },
+      {
+        "name": "search_investor_entities",
+        "arguments": {
+          "entity_type": "investors",
+          "filters": {
+            "name": "Garcia and Sons"
+          }
+        },
+        "output": {
+          "count": 1,
+          "entity_type": "investors",
+          "results": [
+            {
+              "accreditation_status": "non_accredited",
+              "address": "1100 Elizabeth Extension Suite 579, Natalieland, MN 45422",
+              "contact_email": "garcia2853@investment.com",
+              "country": "France",
+              "created_at": "2022-10-16T16:33:39",
+              "date_of_incorporation": "2005-07-05",
+              "investor_id": "102",
+              "name": "Garcia and Sons",
+              "registration_number": 915195060,
+              "source_of_funds": "external_investment",
+              "status": "onboarded",
+              "tax_id": "916-67-4676"
+            }
+          ],
+          "success": true
+        }
+      },
+      {
+        "name": "search_fund_entities",
+        "arguments": {
+          "entity_type": "funds",
+          "filters": {
+            "name": "Hudson-Barnett Value Fund"
+          }
+        },
+        "output": {
+          "count": 1,
+          "entity_type": "funds",
+          "results": [
+            {
+              "created_at": "2023-08-30T23:07:50",
+              "fund_id": "36",
+              "fund_type": "exchange_traded_funds",
+              "manager_id": "45",
+              "name": "Hudson-Barnett Value Fund",
+              "size": 206410899.8,
+              "status": "open",
+              "updated_at": "2025-04-04T21:01:20"
+            }
+          ],
+          "success": true
+        }
+      },
+      {
+        "name": "check_approval",
+        "arguments": {
+          "action": "payment_processing",
+          "requester_email": "anthonygonzalez@gmail.com"
+        },
+        "output": {
+          "approval_valid": true,
+          "message": "Role 'finance_officer' is directly authorized for action 'payment_processing'"
+        }
+      },
+      {
+        "name": "search_investment_flow_entities",
+        "arguments": {
+          "entity_type": "commitments",
+          "filters": {
+            "fund_id": "36",
+            "investor_id": "102"
+          }
+        },
+        "output": {
+          "count": 1,
+          "entity_type": "commitments",
+          "results": [
+            {
+              "commitment_amount": 5409470.66,
+              "commitment_date": "2024-05-04",
+              "commitment_id": "462",
+              "fund_id": "36",
+              "investor_id": "102",
+              "status": "fulfilled",
+              "updated_at": "2024-12-20T00:31:57"
+            }
+          ],
+          "success": true
+        }
+      },
+      {
+        "name": "search_billing_entities",
+        "arguments": {
+          "entity_type": "invoices",
+          "filters": {
+            "commitment_id": "462",
+            "due_date": "2025-07-10"
+          }
+        },
+        "output": {
+          "count": 1,
+          "entity_type": "invoices",
+          "results": [
+            {
+              "amount": 75366.58,
+              "commitment_id": "462",
+              "due_date": "2025-07-10",
+              "invoice_date": "2025-05-22",
+              "invoice_id": "130",
+              "status": "issued",
+              "updated_at": "2025-06-13T23:37:15"
+            }
+          ],
+          "success": true
+        }
+      },
+      {
+        "name": "handle_invoice",
+        "arguments": {
+          "action": "update",
+          "invoice_data": {
+            "status": "paid",
+            "finance_officer_approval": true
+          },
+          "invoice_id": "130"
+        },
+        "output": {
+          "action": "update",
+          "invoice_data": {
+            "amount": 75366.58,
+            "commitment_id": "462",
+            "due_date": "2025-07-10",
+            "invoice_date": "2025-05-22",
+            "invoice_id": "130",
+            "status": "paid",
+            "updated_at": "2025-10-01T12:00:00"
+          },
+          "invoice_id": "130",
+          "message": "Invoice 130 updated successfully",
+          "success": true
+        }
+      },
+      {
+        "name": "add_new_audit_trail",
+        "arguments": {
+          "action": "update",
+          "field_name": "status",
+          "new_value": "paid",
+          "old_value": "issued",
+          "reference_id": "130",
+          "reference_type": "invoice"
+        },
+        "output": {
+          "action": "update",
+          "audit_trail_id": "3501",
+          "created_at": "2025-10-01T00:00:00",
+          "field_name": "status",
+          "new_value": "paid",
+          "old_value": "issued",
+          "reference_id": "130",
+          "reference_type": "invoice"
+        }
+      }
+    ],
+    "output": ["36", "462", "130"],
+    "edges": [
+      {
+        "from": "instruction",
+        "to": "search_user_entities",
+        "connection": {
+          "output": "entity_type, first_name, last_name, role",
+          "input": "entity_type, filters.first_name, filters.last_name, filters.role"
+        }
+      },
+      {
+        "from": "instruction",
+        "to": "search_investor_entities",
+        "connection": {
+          "output": "entity_type, name",
+          "input": "entity_type, filters.name"
+        }
+      },
+      {
+        "from": "instruction",
+        "to": "search_fund_entities",
+        "connection": {
+          "output": "entity_type, name",
+          "input": "entity_type, filters.name"
+        }
+      },
+      {
+        "from": "search_user_entities",
+        "to": "check_approval",
+        "connection": {
+          "output": "results[0].email",
+          "input": "requester_email"
+        }
+      },
+      {
+        "from": "instruction",
+        "to": "check_approval",
+        "connection": {
+          "output": "action",
+          "input": "action"
+        }
+      },
+      {
+        "from": "instruction",
+        "to": "search_investment_flow_entities",
+        "connection": {
+          "output": "entity_type",
+          "input": "entity_type"
+        }
+      },
+      {
+        "from": "search_fund_entities",
+        "to": "search_investment_flow_entities",
+        "connection": {
+          "output": "results[0].fund_id",
+          "input": "filters.fund_id"
+        }
+      },
+      {
+        "from": "search_investor_entities",
+        "to": "search_investment_flow_entities",
+        "connection": {
+          "output": "results[0].investor_id",
+          "input": "filters.investor_id"
+        }
+      },
+      {
+        "from": "instruction",
+        "to": "search_billing_entities",
+        "connection": {
+          "output": "entity_type, due_date",
+          "input": "entity_type, filters.due_date"
+        }
+      },
+      {
+        "from": "search_investment_flow_entities",
+        "to": "search_billing_entities",
+        "connection": {
+          "output": "results[0].commitment_id",
+          "input": "filters.commitment_id"
+        }
+      },
+      {
+        "from": "instruction",
+        "to": "handle_invoice",
+        "connection": {
+          "output": "action, status",
+          "input": "action, invoice_data.status"
+        }
+      },
+      {
+        "from": "search_billing_entities",
+        "to": "handle_invoice",
+        "connection": {
+          "output": "results[0].invoice_id",
+          "input": "invoice_id"
+        }
+      },
+      {
+        "from": "check_approval",
+        "to": "handle_invoice",
+        "connection": {
+          "output": "approval_valid",
+          "input": "invoice_data.finance_officer_approval"
+        }
+      },
+      {
+        "from": "instruction",
+        "to": "add_new_audit_trail",
+        "connection": {
+          "output": "action, field_name, new_value, reference_type",
+          "input": "action, field_name, new_value, reference_type"
+        }
+      },
+      {
+        "from": "search_billing_entities",
+        "to": "add_new_audit_trail",
+        "connection": {
+          "output": "results[0].status, results[0].invoice_id",
+          "input": "old_value, reference_id"
+        }
+      }
+    ],
+    "num_edges": 15
+  }
+}
