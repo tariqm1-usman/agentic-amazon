@@ -7,7 +7,7 @@
   "interface_num": 5,
   "task": {
     "user_id": "74",
-    "instruction": "You are Stephen Murillo, a Compliance Officer. You receive a request from Daniel Landry, a Fund Manager, to process a redemption for the investor Warner, Weiss and Davis in the Bryant and Sons Balanced Fund for USD 1,000,000, effective October 15, 2025. Produce a performance report for the fund covering the period ending August 15, 2024. ",
+    "instruction": "You are Stephen Murillo, a Compliance Officer. You receive a request from Daniel Landry, a Fund Manager, to process a subscription for the investor Warner, Weiss and Davis in the Bryant and Sons Balanced Fund for USD 1,000,000, effective October 15, 2025. Produce a performance report for the fund covering the period ending August 15, 2024. ",
     "actions": [
       {
         "name": "get_user_entities",
