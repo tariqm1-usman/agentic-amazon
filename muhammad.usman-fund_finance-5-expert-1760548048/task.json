@@ -225,7 +225,7 @@
         }
       }
     ],
-    "output": ["88", "149", "85"],
+    "outputs": ["88", "149", "85"],
     "edges": [
       {
         "from": "instruction",
