@@ -235,8 +235,8 @@
         "from": "instruction",
         "to": "get_reporting_entities",
         "connection": {
-          "output": "report_type, report_type",
-          "input": "report_type, filters.report_type"
+          "output": "entity_type, report_type",
+          "input": "entity_type, filters.report_type"
         }
       },
       {
