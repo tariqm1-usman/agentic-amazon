@@ -7,7 +7,7 @@
   "interface_num": 5,
   "task": {
     "user_id": "104",
-    "instruction": "You are Beverly Terrell, a Compliance Officer. You receive a request to onboard an investor named Lexington Ridge Investments LP, with the source of funds dividend income, contact email compliance@lexridgeinvest.com and they are based in the United Kingdom. Send an alert notification to this investor.",
+    "instruction": "You are Beverly Terrell, a Compliance Officer. You have received a request to onboard an accredited investor named 'Lexington Ridge Investments LP', with the source of funds dividend income, contact email compliance@lexridgeinvest.com, and they are based in the United Kingdom. Send an alert notification to this investor.",
     "actions": [
       {
         "name": "get_user_entities",
